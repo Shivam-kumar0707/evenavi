@@ -91,6 +91,7 @@ export function BudgetTab() {
               <div className="relative">
                 <input
                   id="budget-total-input"
+                  key={event.totalBudget}
                   type="text"
                   data-testid="budget-total-input"
                   defaultValue={formatINR(event.totalBudget)}
@@ -111,6 +112,7 @@ export function BudgetTab() {
               </label>
               <input
                 id="budget-guests-input"
+                key={event.guestCount}
                 type="number"
                 data-testid="budget-guests-input"
                 min={1}
@@ -338,7 +340,9 @@ export function BudgetTab() {
                             <label className="block text-[10px] text-stone-400 uppercase font-semibold">Planned</label>
                             <input
                               type="text"
+                              key={`${item.id}-${item.planned}`}
                               data-testid={`budget-category-planned-${item.id}`}
+                              aria-label={`Planned budget for ${item.category}`}
                               defaultValue={formatINR(item.planned)}
                               onBlur={(e) => {
                                 const val = parseMoney(e.target.value);
@@ -357,7 +361,9 @@ export function BudgetTab() {
                             <label className="block text-[10px] text-stone-400 uppercase font-semibold">Spent</label>
                             <input
                               type="text"
+                              key={`${item.id}-${item.spent || 0}`}
                               data-testid={`budget-category-spent-${item.id}`}
+                              aria-label={`Spent budget for ${item.category}`}
                               defaultValue={item.spent ? formatINR(item.spent) : '₹0'}
                               onBlur={(e) => {
                                 const val = parseMoney(e.target.value);

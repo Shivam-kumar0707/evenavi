@@ -165,7 +165,6 @@ Please fix the errors and return ONLY the corrected valid JSON matching the exac
       ok: false,
       code: 'INVALID_AI_OUTPUT',
       message: 'Model output failed schema validation after repair attempt.',
-      rawOutput: groqResult.data,
     });
   }
 

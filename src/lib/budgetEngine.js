@@ -245,6 +245,13 @@ export function rebalance({ allocations, total, edited = null, eventType = 'wedd
     }
   }
 
+  // Final exact residual reconciliation
+  const sumUnlocked = allocatedUnlocked.reduce((sum, a) => sum + a.planned, 0);
+  const diffFromTarget = remainingBudget - sumUnlocked;
+  if (diffFromTarget !== 0 && allocatedUnlocked.length > 0) {
+    allocatedUnlocked[0].planned += diffFromTarget;
+  }
+
   const unlockedMap = Object.fromEntries(
     allocatedUnlocked.map(a => [a.item.id, a.planned])
   );

@@ -61,11 +61,36 @@ export async function fetchPlanFromFirestore(planId) {
 export async function savePlanToFirestore(planId, planData) {
   if (!db || !planId || !planData) return false;
   try {
-    const planRef = doc(db, 'plans', planId);
-    await setDoc(planRef, {
-      ...planData,
+    const {
+      schemaVersion,
+      createdAt,
+      updatedAt,
+      event,
+      budget,
+      timeline,
+      timelineMeta,
+      vendors,
+      ideas,
+      risks,
+      quotes,
+    } = planData;
+
+    const sanitized = {
+      schemaVersion: schemaVersion || 1,
+      createdAt: createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    }, { merge: true });
+      event: event || {},
+      budget: budget || {},
+      timeline: timeline || [],
+      timelineMeta: timelineMeta || { compressed: false, warning: '' },
+      vendors: vendors || [],
+      ideas: ideas || {},
+      risks: risks || [],
+      quotes: quotes || [],
+    };
+
+    const planRef = doc(db, 'plans', planId);
+    await setDoc(planRef, sanitized, { merge: true });
     return true;
   } catch (error) {
     console.warn(`Firestore write failed for plan ${planId}, plan remains saved in localStorage.`, error.message);

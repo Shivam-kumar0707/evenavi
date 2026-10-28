@@ -12,6 +12,7 @@ export function QuotesTab() {
   const [quotes, setQuotes] = useState(['', '', '']);
   const [comparing, setComparing] = useState(false);
   const [latestResult, setLatestResult] = useState(null);
+  const [validationError, setValidationError] = useState('');
 
   if (!plan) return null;
 
@@ -19,6 +20,7 @@ export function QuotesTab() {
   const categories = plan.budget?.allocations?.map((a) => a.category) || ['Venue', 'Catering', 'Decor & Lighting', 'Photo & Video'];
 
   const handleQuoteChange = (index, val) => {
+    setValidationError('');
     const updated = [...quotes];
     updated[index] = val;
     setQuotes(updated);
@@ -27,9 +29,10 @@ export function QuotesTab() {
   const handleCompare = async () => {
     const validQuotes = quotes.map((q) => q.trim()).filter(Boolean);
     if (validQuotes.length < 2) {
-      alert('Please paste at least 2 vendor quotes to compare.');
+      setValidationError('Please paste at least 2 vendor quotes to compare.');
       return;
     }
+    setValidationError('');
 
     setComparing(true);
     try {
@@ -125,6 +128,14 @@ export function QuotesTab() {
             <span>{comparing ? 'Analyzing Quotes...' : 'Analyze & Compare Quotes'}</span>
           </button>
         </div>
+
+        {/* Validation Error Banner */}
+        {validationError && (
+          <div role="alert" className="mt-4 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{validationError}</span>
+          </div>
+        )}
       </div>
 
       {/* Comparison Results Card */}

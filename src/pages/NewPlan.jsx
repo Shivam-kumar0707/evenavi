@@ -7,7 +7,7 @@ import { allocate, getTemplate } from '../lib/budgetEngine.js';
 import { generateTimeline, mergeExtraTasks } from '../lib/timelineEngine.js';
 import { getVendorTemplates } from '../data/vendorTemplates.js';
 import { evaluateRisks } from '../lib/riskEngine.js';
-import { callAiTask } from '../lib/aiClient.js';
+import { callAiTask, getDeterministicFallback } from '../lib/aiClient.js';
 import { useSpeech } from '../hooks/useSpeech.js';
 import { usePlanStore, saveToLocalStorage } from '../lib/planStore.js';
 import { EXAMPLE_INTAKE_PROMPTS, CITY_TIERS, DIET_OPTIONS, VENUE_TYPES } from '../data/templates.js';
@@ -193,11 +193,7 @@ export function NewPlan() {
       timelineMeta,
       vendors,
       ideas: {
-        themes: [],
-        menu: { starters: [], mains: [], desserts: [], drinks: [] },
-        activities: [],
-        returnGifts: [],
-        invitation: { en: '', hi: '', hinglish: '' },
+        ...getDeterministicFallback('ideas', { event: planEvent }),
         source: 'template',
       },
       risks: [],

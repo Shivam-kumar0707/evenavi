@@ -120,11 +120,14 @@ export function VendorsTab() {
                   </span>
                   <div className="space-y-1.5">
                     {vendor.tasks.map((task) => (
-                      <div
+                      <button
+                        type="button"
+                        role="checkbox"
+                        aria-checked={task.done}
                         key={task.id}
                         data-testid={`vendor-task-item-${task.id}`}
                         onClick={() => toggleVendorTask(vendor.id, task.id)}
-                        className="flex items-start gap-2.5 text-xs text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-800 p-1.5 rounded-lg transition-colors"
+                        className="w-full text-left flex items-start gap-2.5 text-xs text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 p-1.5 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       >
                         {task.done ? (
                           <CheckSquare className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
@@ -134,7 +137,7 @@ export function VendorsTab() {
                         <span className={task.done ? 'line-through text-stone-400' : ''}>
                           {task.text}
                         </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
