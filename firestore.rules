@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function validPlan(d) {
+      return d.keys().hasOnly(['schemaVersion','createdAt','updatedAt','event','budget',
+                               'timeline','timelineMeta','vendors','ideas','risks','quotes'])
+        && d.event.guestCount is int && d.event.guestCount > 0 && d.event.guestCount <= 20000
+        && d.event.totalBudget is number && d.event.totalBudget > 0;
+    }
+    match /plans/{planId} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if planId.size() >= 10 && planId.size() <= 24 && validPlan(request.resource.data);
+      allow update: if validPlan(request.resource.data)
+                    && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+    }
+  }
+}
